@@ -1,0 +1,54 @@
+
+html,body{
+	margin: 0px;
+	padding: 0px;
+	color:#000;
+}
+ul,li{
+	list-style: none;
+}
+a{
+	text-decoration: none;
+}
+.wrapper{
+	max-width: 1920px; /* 设定网页的最大宽度 */
+	margin:0px auto;
+}
+.banner{
+	height: 80px;
+	background: #333333;
+	line-height: 80px;
+	font-size: 20px;
+}
+.container{
+	width: 1300px;  /* banner内container的宽度 */
+	height: 80px;
+	margin:0 auto;
+}
+.ctn-name{
+	float: left;
+	height: 80px;
+	margin-left: 0px;  /* 左外边距 */
+	color: #00AA00;
+}
+.right-info{
+	float: right;
+	height: 80px;
+	color:#3984c7;
+}
+.right-info .contact{
+	float:left;
+	height: 80px;
+	margin-right: 100px;  /* 右外边距 */
+}
+.right-info .mail{
+	float:right;
+	height: 80px;
+
+}
+.content{
+	height: 900px;  /* 网页高度 */
+	background: url("../img/bg.jpg") no-repeat;
+	background-size: cover;  /* 使背景图片自适应 */
+	padding-top:1px;
+}

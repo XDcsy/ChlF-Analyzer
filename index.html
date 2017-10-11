@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ChlF Analyzer</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="css/pub.css">
+	<link rel="stylesheet" type="text/css" href="css/demo.css">
+	<link rel="stylesheet" type="text/css" href="css/animate.min.css">
+	<link rel="stylesheet" type="text/css" href="font-awesome-4.7.0/css/font-awesome.min.css">
+    <script type="text/javascript" src="js/xlsx.full.min.js"></script>
+	<script type="text/javascript" src="js/echarts.js"></script>
+	<script type="text/javascript" src="js/dark.js"></script>
+	<script type="text/javascript" src="js/ecStat.js"></script>
+    <script type="text/javascript" src="js/chart0.js"></script>
+</head>
+<body>
+	<div class="wrapper">
+		<div class="banner">
+			<div class="container">
+				<div class="ctn-name">Laboratory of Bioinstrumentation, Jiangnan University</div>
+				<div class="right-info">
+					<div class="contact">Contact: Ya Guo</div>
+					<div class="mail">Mail: Guoy@jiangnan.edu.cn</div>
+				</div>
+			</div>
+		</div>
+		<div class="content">
+			<div class="content-edit">
+				<div class="ctn-text">
+					<p class="big-p">ChlF Analyzer</p>
+					<p class="small-p">This analyzer helps you locate the feature points of chlorophyll fluorescence signals.</p>
+					<p class="small-p">Input .xls or .xlsx files and click "Continue".</p>
+				</div>
+				<div class="ctn-btns">
+					<div class="btn btn-sel" id="sel">Select files</div>
+					<input type="file" name="" id="files" style="display: none;" multiple>
+					<div class="btn btn-cot" id="next">Continue</div>
+				</div>
+			</div>
+			<div class="cont" style="display:none;">
+				<div class="cont-text">
+					<p class="big-p">Locate the range of feature points</p>
+					<p class="small-p">Use the "Select" tool at the top right corner of the chart to brush the range.</p>
+					<p class="small-p">Use the "Keep" tool to brush multiple regions.</p>
+					<div class="ctn" id="chart0"></div>
+				</div>
+				<div class="btn-cot1" id="next2">Continue</div>
+			</div>
+			
+			<div class="chart-display" style="display:none;">
+				<ul class="left-ctn">
+					<li id="chart1"></li>
+					<li id="chart2"></li>
+					<li id="chart3"></li>
+					<li id="chart4"></li>
+				</ul>
+				<div class="right-ctn">
+					<div class="form-group">
+					    <p style="font-size:25px;">Opration Area</p>
+					</div>
+					<hr>
+					<div class="form-group">
+						<p>Choose chart ID</p>
+						<select id="IDselecter" class="sel">
+						</select>
+					</div>
+					<hr>
+					<div class="form-group">
+						<p>Switch chart</p>
+						<div class="right-btn">
+							<div class="bt left" id="preChartBtn"><i class="fa fa-angle-left"></i></div>
+							<div class="bt right " id="nextChartBtn"><i class="fa fa-angle-right"></i></div>
+						</div>
+					</div>
+					<hr>
+					<div class="form-group">
+						<p>Move feature point</p>
+						<div class="right-btn">
+							<div class="bt left" id="leftBtn"><i class="fa fa-angle-left"></i></div>
+							<div class="bt right " id="rightBtn"><i class="fa fa-angle-right"></i></div>
+						</div>
+					</div>
+					<hr>
+					<div class="form-group" style="margin-top:80px;">
+						<div class="btns">Save txt</div>
+						<div class="btns">Save xls</div>
+					</div>
+				</div>
+			</div>
+			
+			
+			
+		</div>
+	</div>
+	<script type="text/javascript" src="js/jquery-2.0.0.js"></script>
+	<script type="text/javascript" src="js/charts.js"></script>
+	<script type="text/javascript" src="js/parse.js"></script>
+	<script type="text/javascript" src="js/demo.js"></script>
+</body>
+</html>
