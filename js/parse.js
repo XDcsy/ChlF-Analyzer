@@ -159,7 +159,7 @@ function fixdata(Bdata) {
     return o;
 }
 
-function processFiles(files) {
+function processFiles(files, callback) {
 	for (var i = 0, f; f = files[i]; i++) { //依次读取选中的文件
         var reader = new FileReader();
         reader.onload = function (e) {
@@ -171,6 +171,9 @@ function processFiles(files) {
         else
             reader.readAsArrayBuffer(f);
     }
+	if (callback) {
+		callback();
+	}
 }
 
 function parsing(Bdata) { //将Bdata解析为可处理的string/json/HTML等
