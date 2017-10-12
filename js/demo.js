@@ -9,7 +9,11 @@ $(function(){
 	    for (var i = 0, f; f = files[i]; i++) {
 	        filesNumber++;
   		}
+		$("#next").addClass("btn-disabled");
+		$("#next").html("Processing");
 		processFiles(files);
+		$("#next").removeClass("btn-disabled");
+		$("#next").html("Continue");
     }
      document.getElementById('files').addEventListener('change', handleFileSelect, false);
      $("#next").click(function(){
