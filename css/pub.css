@@ -11,7 +11,7 @@ a{
 	text-decoration: none;
 }
 .wrapper{
-	max-width: 1920px; /* 设定网页的最大宽度 */
+	/*max-width: 1920px;  设定网页的最大宽度，不设定时随浏览器改变 */
 	margin:0px auto;
 }
 .banner{
@@ -21,19 +21,20 @@ a{
 	font-size: 20px;
 }
 .container{
-	width: 1600px;  /* banner内container的宽度 */
+	/*width: 1600px;   banner内container的宽度 */
 	height: 80px;
 	margin:0 auto;
 }
 .ctn-name{
 	float: left;
 	height: 80px;
-	margin-left: 0px;  /* 左外边距 */
+	margin-left: 40px;  /* 左外边距 */
 	color: #00AA00;
 }
 .right-info{
 	float: right;
 	height: 80px;
+	margin-right: 40px;
 	color:#3984c7;
 }
 .right-info .contact{
@@ -47,7 +48,7 @@ a{
 
 }
 .content{
-	height: 900px;  /* 网页高度 */
+	height: 900px;  /* 除banner外的网页高度 */
 	background: url("../img/bg.jpg") no-repeat;
 	background-size: cover;  /* 使背景图片自适应 */
 	padding-top:1px;
