@@ -2,14 +2,14 @@ var chart1, chart2, chart3, chart4;
 var chartAry = [];
 // Setup the listeners.
 var IDselecter = document.getElementById('IDselecter');
-var notlog1 = document.getElementById('notlog1');
-var log1 = document.getElementById('log1');
-var notlog2 = document.getElementById('notlog2');
-var log2 = document.getElementById('log2');
-var notlog3 = document.getElementById('notlog3');
-var log3 = document.getElementById('log3');
-var notlog4 = document.getElementById('notlog4');
-var log4 = document.getElementById('log4');
+//var notlog1 = document.getElementById('notlog1');
+//var log1 = document.getElementById('log1');
+//var notlog2 = document.getElementById('notlog2');
+//var log2 = document.getElementById('log2');
+//var notlog3 = document.getElementById('notlog3');
+//var log3 = document.getElementById('log3');
+//var notlog4 = document.getElementById('notlog4');
+//var log4 = document.getElementById('log4');
 
 var preChartBtn = document.getElementById('preChartBtn');
 var nextChartBtn = document.getElementById('nextChartBtn');
@@ -19,8 +19,8 @@ var leftBtn = document.getElementById("leftBtn");
 var rightBtn = document.getElementById("rightBtn");
 
 
-var notlogAry = [notlog1,notlog2,notlog3,notlog4];
-var logAry = [log1,log2,log3,log4];
+//var notlogAry = [notlog1,notlog2,notlog3,notlog4];
+//var logAry = [log1,log2,log3,log4];
 
 IDselecter.addEventListener('change', changeID, false);
 //notlog1.addEventListener('click',function(){setNotLog(0)});
@@ -48,20 +48,20 @@ function nextChart(){
 	}
 }
 
-function setNotLog(i) {
-	chartAry[i].setOption({
-        xAxis : {
-            type : 'value'
-		}
-	})
-}
-function setLog(i) {
-	chartAry[i].setOption({
-        xAxis : {
-            type : 'log'
-		}
-	})
-}
+//function setNotLog(i) {
+//	chartAry[i].setOption({
+//        xAxis : {
+//            type : 'value'
+//		}
+//	})
+//}
+//function setLog(i) {
+//	chartAry[i].setOption({
+//        xAxis : {
+//            type : 'log'
+//		}
+//	})
+//}
 
 //判断浏览器是否支持FileReader.readAsBinaryString
 var rABS = typeof FileReader !== "undefined" && typeof FileReader.prototype !== "undefined" && typeof FileReader.prototype.readAsBinaryString !== "undefined";
@@ -238,6 +238,8 @@ function preProcess() {
 }
 
 function getFeaturePoints() {
+	if (!index) 
+		return;  //未选择特征点范围时不向后执行
 	var range = splitIndex();
 	findMaxPoint(range); //寻找极大值点
 	initialDraw(); //画初始图

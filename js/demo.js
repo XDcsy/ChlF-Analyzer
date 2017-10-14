@@ -25,12 +25,17 @@ $(function(){
      	if(filesNumber == 0){
      		alert("Please select files first!")
      	}else{
-     		$(".content-edit").hide();
+     		$("#copyright").hide();
+			$(".content-edit").hide();
      		$(".cont").addClass("animated slideInRight").show();
      	}
      });
      $("#next2").click(function(){
-     	$(".cont").hide();
-     	$(".chart-display").addClass("animated slideInRight").show();
+     	if (!index) {
+            alert("Please brush at least one range.")
+		}else{
+			$(".cont").hide();
+     	    $(".chart-display").addClass("animated slideInRight").show();
+		}
      });
 })
