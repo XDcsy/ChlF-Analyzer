@@ -1,7 +1,7 @@
 
 .content-edit{
 	width: 640px;
-	height: 300px;
+	height: 350px;
 	margin: 0px auto;
 	margin-top:200px;
 	padding: 40px;
@@ -16,6 +16,9 @@
 .small-p{
 	font-size:20px;
 	color:rgba(0,0,0,0.5);
+}
+.dialog-trigger{
+	cursor: pointer;
 }
 .ctn-text{
 	margin-bottom: 50px;
@@ -105,7 +108,7 @@
 	background-size: cover;
 	float: right;
 	width:19%;
-	height: 798px;
+	height: 848px;
 	padding-top:100px;
 	margin:0px;
 	border:1px solid #000;

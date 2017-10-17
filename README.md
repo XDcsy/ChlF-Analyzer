@@ -5,6 +5,8 @@
 重写拟合的方法<br>
 能够记录读取到的每个信号的名称<br>
 划定特征点范围后到求极值这部分的代码需要改动<br>
+图表不再使用font-awesome，改为使用jqui<br>
+echarts和jqui改为使用最小文件<br>
 解决使用datazoom后选择特征点的bug（暂时注释了datazoom）<br>
 给第三步的log按钮换图标<br>
 分离四个图表转换到log的操作<br>
