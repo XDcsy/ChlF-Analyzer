@@ -206,18 +206,40 @@ function csvToAry(c) {
         tempAry[i] = tempAry[i].split(",").map(s => +s); //look like [[2,3,4,5],[...]]
     }
     var amount = tempAry[0].length - 1; //一个csv中所包含的信号数量
-    for (var i = 0; i < amount; i++) {
-        var data = [];
-        var head = 2;
-        var end = tempAry.length - 165; //只使用从head到end的数据
-        for (var j = head; j < end; j++) {
-            data.push([tempAry[j][0], tempAry[j][i + 1]]); //get data like [[2,3],[...],...]
-        }
-        signals.push(new signal(data));
-        var signalOption = new Option(num.toString(), num);
-        IDselecter.options.add(signalOption);
-        num++; //将每一个新信号，添加进选择框
-    }
+    if (headByValue)  //如果用户选择使用value来限定范围
+	{
+		for (var i = 0; i < amount; i++) {
+			var data = [];
+			for (var j = 0; j < tempAry.length; j++) {
+				if ((tempAry[j][i + 1] > headByValue) && (tempAry[j][i + 1] < endByValue))
+					data.push([tempAry[j][0], tempAry[j][i + 1]]); //get data like [[2,3],[...],...]
+			}
+			signals.push(new signal(data));
+			var signalOption = new Option(num.toString(), num);
+			IDselecter.options.add(signalOption);
+			num++; //将每一个新信号，添加进选择框
+		}
+	}
+	else {
+		for (var i = 0; i < amount; i++) {
+			var data = [];
+			if (!head) {  //!!!这里设定了在用户未输入head与end时，默认的范围
+				head = 2;
+				end = tempAry.length - 165; //只使用从head到end的数据
+			}
+			if (head < 0)  //head与end不能超出索引范围
+				head = 0;
+			if (end > tempAry.length)
+				end = tempAry.length;
+			for (var j = head; j < end; j++) {
+				data.push([tempAry[j][0], tempAry[j][i + 1]]); //get data like [[2,3],[...],...]
+			}
+			signals.push(new signal(data));
+			var signalOption = new Option(num.toString(), num);
+			IDselecter.options.add(signalOption);
+			num++; //将每一个新信号，添加进选择框
+		}
+	}
     if (signals.length != 0) {
         preProcess();
     } //!!!全部数据生成完毕后，通过交互读取数据范围等

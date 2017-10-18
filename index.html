@@ -99,7 +99,30 @@
 	
 <!-- 弹出框 -->
 	<div id="dialog1" title="Discard points">
-		Choose the points:
+        <ul>
+            <li><a href="#dialog1-tabs1">by index</a></li>
+            <li><a href="#dialog1-tabs2">by value</a></li>
+        </ul>
+        <div id="dialog1-tabs1">
+            <p>Only use the points between</p>
+			<label for="dialog1-index-min">min index number: </label>
+            <input id="dialog1-index-min">
+			<br>
+			<label for="dialog1-index-max">max index number: </label>
+            <input id="dialog1-index-max">
+			<br>
+			<button id="dialog1-btn1">set</button>
+        </div>
+        <div id="dialog1-tabs2">
+            <p>Only use the points between</p>
+			<label for="dialog1-value-min">min value: </label>
+            <input id="dialog1-value-min">
+			<br>
+			<label for="dialog1-value-max">max value: </label>
+            <input id="dialog1-value-max">
+			<br>
+			<button id="dialog1-btn2">set</button>
+        </div>
 	</div>
 		
 	<div id="dialog2" title="Input range">
