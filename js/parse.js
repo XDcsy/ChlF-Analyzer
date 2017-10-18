@@ -202,7 +202,7 @@ function parsing(Bdata) { //将Bdata解析为可处理的string/json/HTML等
 
 function csvToAry(c) {
     tempAry = c.split("\n"); //look like [["2","3","4","5"],[...],...]
-    for (var i = 0; i < tempAry.length; i++) {
+    for (var i = 0; i < tempAry.length - 1; i++) {
         tempAry[i] = tempAry[i].split(",").map(s => +s); //look like [[2,3,4,5],[...]]
     }
     var amount = tempAry[0].length - 1; //一个csv中所包含的信号数量
