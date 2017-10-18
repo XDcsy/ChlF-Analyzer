@@ -108,10 +108,10 @@
 	background-size: cover;
 	float: right;
 	width:19%;
-	height: 848px;
+	height: 820px;  /* height+padding-top = .content的height */
 	padding-top:100px;
 	margin:0px;
-	border:1px solid #000;
+	/* border:1px solid #000; */
 }
 .form-group{
 	width:70%;

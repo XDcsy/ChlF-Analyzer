@@ -48,7 +48,7 @@ a{
 
 }
 .content{
-	height: 950px;  /* 除banner外的网页高度，调整时和第三页的right-ctn一起调整 */
+	height: 920px;  /* 除banner外的网页高度，调整时和第三页的right-ctn一起调整 */
 	background: url("../img/bg.jpg") no-repeat;
 	background-size: cover;  /* 使背景图片自适应 */
 	padding-top:1px;
