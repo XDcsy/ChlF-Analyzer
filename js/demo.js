@@ -1,5 +1,6 @@
 
 $(function(){
+    document.getElementById('files').addEventListener('change', handleFileSelect, false);
 	var filesNumber = 0;
 	$("#sel").click(function(){
 		$("#files").click();
@@ -20,7 +21,6 @@ $(function(){
 		$("#next").html("Processing");
 		setTimeout(processFiles, 500, files, ableBtn);  //设置延时使能够显示processing效果
     }
-     document.getElementById('files').addEventListener('change', handleFileSelect, false);
      $("#next").click(function(){
      	if(filesNumber == 0){
      		alert("Please select files first!")

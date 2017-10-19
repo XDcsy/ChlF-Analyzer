@@ -140,7 +140,7 @@ function signal(data) { //构造函数
     this.d1Data = combine(T, d1Y); //t, dy
     this.d2Data = combine(T, d2Y); //t, ddy
     this.cData = combine(T, cY); //t, log(c)
-    this.cLogData = combine(logT, cY); //log(t), log(c)
+    //this.cLogData = combine(logT, cY); //log(t), log(c)
         //this.d1 = d1();
         //this.d2 = d2();
 	this.featurePoints = [];
@@ -206,12 +206,12 @@ function csvToAry(c) {
         tempAry[i] = tempAry[i].split(",").map(s => +s); //look like [[2,3,4,5],[...]]
     }
     var amount = tempAry[0].length - 1; //一个csv中所包含的信号数量
-    if (headByValue)  //如果用户选择使用value来限定范围
+    if (headByValue)  //如果用户选择使用value来限定范围。这个判断方式使得headByValue不能为0
 	{
 		for (var i = 0; i < amount; i++) {
 			var data = [];
 			for (var j = 0; j < tempAry.length; j++) {
-				if ((tempAry[j][i + 1] > headByValue) && (tempAry[j][i + 1] < endByValue))
+				if ((tempAry[j][0] > headByValue) && (tempAry[j][0] < endByValue))
 					data.push([tempAry[j][0], tempAry[j][i + 1]]); //get data like [[2,3],[...],...]
 			}
 			signals.push(new signal(data));
@@ -247,12 +247,12 @@ function csvToAry(c) {
 
 
 function preProcess() {
-	var chart0 = echarts.init(document.getElementById('chart0'), "dark");
+	chart0 = echarts.init(document.getElementById('chart0'), "dark");
 	var next2 = document.getElementById('next2');
 	
 	for (var i = 0; i < signals.length; i++){
-		chart0Options.series.push({name:"signal"+i.toString(), type:"line", sampling:"average",symbol:"none", itemStyle:{normal:{color:"#A9A9A9"}},data:signals[i].cLogData}); //对chart0使用了sampling:"average"进行降采样，优化性能
-		chart0Options.series.push({name:"ssignal"+i.toString(), type:"scatter", symbolSize:3, z:100, data:signals[i].cLogData});
+		chart0Options.series.push({name:"signal"+i.toString(), type:"line", sampling:"average",symbol:"none", itemStyle:{normal:{color:"#A9A9A9"}},data:signals[i].cData}); //对chart0使用了sampling:"average"进行降采样，优化性能
+		chart0Options.series.push({name:"ssignal"+i.toString(), type:"scatter", symbolSize:3, z:100, data:signals[i].cData});  //brush只支持散点图，因此使用散点覆盖于line上方
 	}
 	chart0.setOption(chart0Options, true);
 	chart0.on('brushselected', brushed);

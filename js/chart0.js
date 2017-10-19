@@ -27,11 +27,13 @@ var chart0Options ={
             brushLink: 'all',
             outOfBrush: {
                 colorAlpha: 0
-            }
+            },
+			throttleType: 'debounce',  //设置事件延迟提升性能
+            throttleDelay: 300,
         },
 	
     xAxis : {
-        type : 'value', //'log'为对数轴
+        type : 'log', //'log'为对数轴
         name : 'time',
         splitLine : { //分隔线
             lineStyle : {

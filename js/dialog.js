@@ -1,5 +1,6 @@
 //before parse.js
 var head, end, headByValue, endByValue;
+var regions=[];
 
 
 $( "#dialog1" ).dialog({ autoOpen: false });
@@ -12,7 +13,7 @@ $( "#dialog1-btn1" ).button().click(function() {
 	if (isNaN(head))  //当用户选择了使用此tab设置，但是数据留空或输入了非数字时，使用的默认值
 		head = 0;
 	if (isNaN(end))
-		end = 1000000;
+		end = 99999999;
 	$( "#dialog1" ).dialog( "close" );
 });
 $( "#dialog1-btn2" ).button().click(function() {
@@ -23,16 +24,41 @@ $( "#dialog1-btn2" ).button().click(function() {
 	if (isNaN(head))
 		head = 0;
 	if (isNaN(end))
-		end = 1000000;
+		end = 99999999;
 	$( "#dialog1" ).dialog( "close" );
 });
 
 
 
 $( "#dialog2" ).dialog({ autoOpen: false });
-
-
-
+$( "#dialog2" ).tabs();
+//$( "#dialog2-btn1" ).button().click(function() {   });
+$( "#dialog2-btn2" ).button().click(function() {
+	//每当使用这个功能时
+	regions = [];  //清空之前的rigions
+	if (index && index.length !=0) {  //如果图上已有被选择的区域
+	    var range = splitIndex();
+		for (var i = 0; i < range.length; i++) { //对每一个区域
+		    startIndex = range[i][0];  //它的首尾index值
+			endIndex = range[i][range[i].length-1];
+			regions.push([signals[0].data[startIndex][0], signals[0].data[endIndex][0]]); //对应到signals0的横坐标，添加至rigions
+		}
+	}
+	var startValue = parseInt($("#dialog2-value-min").val());
+	var endValue = parseInt($("#dialog2-value-max").val());
+	regions.push([startValue, endValue]);  //本次要添加的区域
+	//构造对象
+	var areaObjAry = [];
+	for (var i = 0; i < regions.length; i++) {
+		areaObjAry.push({xAxisIndex: 0,yAxisIndex: 0,brushType: 'rect',coordRange: [regions[i],[-10000,10000]]});
+		                                             //应该使用lineX但似乎有bug，只能用rect代替  //rect在y轴方向应该无限延伸
+	}
+	chart0.dispatchAction({
+		type: 'brush',
+		areas: areaObjAry,
+	});
+	$( "#dialog2" ).dialog( "close" );
+});
 
 $( "#trigger1" ).click(function() {
 	if (signals.length != 0) {
