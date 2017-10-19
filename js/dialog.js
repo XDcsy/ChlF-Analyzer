@@ -21,32 +21,34 @@ $( "#dialog1-btn2" ).button().click(function() {
 	end = undefined;
 	headByValue = parseInt($("#dialog1-value-min").val());
 	endByValue = parseInt($("#dialog1-value-max").val());
-	if (isNaN(head))
-		head = 0;
-	if (isNaN(end))
-		end = 99999999;
+	if (isNaN(headByValue))
+		headByValue = 0;
+	if (isNaN(endByValue))
+		endByValue = 99999999;
 	$( "#dialog1" ).dialog( "close" );
 });
 
-
-
-$( "#dialog2" ).dialog({ autoOpen: false });
-$( "#dialog2" ).tabs();
-//$( "#dialog2-btn1" ).button().click(function() {   });
-$( "#dialog2-btn2" ).button().click(function() {
+function addArea(isValue) {
 	//每当使用这个功能时
 	regions = [];  //清空之前的rigions
 	if (index && index.length !=0) {  //如果图上已有被选择的区域
 	    var range = splitIndex();
 		for (var i = 0; i < range.length; i++) { //对每一个区域
-		    startIndex = range[i][0];  //它的首尾index值
-			endIndex = range[i][range[i].length-1];
+		    var startIndex = range[i][0];  //它的首尾index值
+			var endIndex = range[i][range[i].length-1];
 			regions.push([signals[0].data[startIndex][0], signals[0].data[endIndex][0]]); //对应到signals0的横坐标，添加至rigions
 		}
 	}
-	var startValue = parseInt($("#dialog2-value-min").val());
-	var endValue = parseInt($("#dialog2-value-max").val());
-	regions.push([startValue, endValue]);  //本次要添加的区域
+	if (isValue) {
+	    var start = parseInt($("#dialog2-value-min").val());
+	    var end = parseInt($("#dialog2-value-max").val());
+	    regions.push([start, end]);  //用value表示的本次要添加的区域
+	}
+	else {
+	    var start = parseInt($("#dialog2-index-min").val());
+	    var end = parseInt($("#dialog2-index-max").val());
+		regions.push([signals[0].data[start][0], signals[0].data[end][0]]);  //用index表示的话，利用signals[0]对应到value再添加
+	}
 	//构造对象
 	var areaObjAry = [];
 	for (var i = 0; i < regions.length; i++) {
@@ -57,6 +59,20 @@ $( "#dialog2-btn2" ).button().click(function() {
 		type: 'brush',
 		areas: areaObjAry,
 	});
+}
+
+$( "#dialog2" ).dialog({ autoOpen: false });
+$( "#dialog2" ).tabs();
+$( "#dialog2-btn1" ).button().click(function() {
+    addArea(false);
+	$("#dialog2-index-min").val("");
+	$("#dialog2-index-max").val("");
+	$( "#dialog2" ).dialog( "close" );
+});
+$( "#dialog2-btn2" ).button().click(function() {
+    addArea(true);
+	$("#dialog2-value-min").val("");
+	$("#dialog2-value-max").val("");
 	$( "#dialog2" ).dialog( "close" );
 });
 
