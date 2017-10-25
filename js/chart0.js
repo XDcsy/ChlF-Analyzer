@@ -3,12 +3,14 @@ var chart0Options ={
 //            {
 //                type: 'slider', // 这个 dataZoom 组件是 slider 型 dataZoom 组件
 //                start: 0,      // 左边在 10% 的位置。
-//                end: 100         // 右边在 60% 的位置。
+//                end: 100,         // 右边在 60% 的位置。
+//			      realtime:false  //关闭拖动时的实时更新
 //            },
 //            {
 //                type: 'inside', // 这个 dataZoom 组件是 inside 型 dataZoom 组件
 //                start: 0,      // 左边在 10% 的位置。
-//                end: 100         // 右边在 60% 的位置。
+//                end: 100,         // 右边在 60% 的位置。
+//				  realtime:false
 //            }
 //            ],
 			
