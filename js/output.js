@@ -3,7 +3,7 @@ $(function(){
 	$("#result").click(function(){
 		str = "";
 		for (var i = 0; i < signals.length; i++) {
-			str += "The index of the feature points of signal[" + i.toString() + "]: " + signals[i].featurePoints.toString() +"\r\n";
+			str += "The index of the feature points of " + signals[i].name + ": " + signals[i].featurePoints.toString() +"\r\n";
 		}
 		alert(str);
 	})
@@ -17,7 +17,7 @@ $(function(){
 		
 		var table = [];
 		for (var i = 0; i < signals.length; i++) {
-			table.push(["Signal ID: "+signals[i].num.toString()]);
+			table.push([signals[i].name]);
 			table.push(["Feature point index:"]);
 			table.push(signals[i].featurePoints);
 			table.push([""]);

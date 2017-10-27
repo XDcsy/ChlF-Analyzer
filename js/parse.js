@@ -68,6 +68,7 @@ var rABS = typeof FileReader !== "undefined" && typeof FileReader.prototype !== 
 
 var signals = [];
 var num = 0; //记录signal的序号
+var signalNames = [];  //记录signal的名称
 var index;  //记录特征点的范围
 
 
@@ -121,6 +122,7 @@ function signal(data) { //构造函数
 	
     this.data = data; //t,y
     this.num = num;
+	this.name = signalNames[num];
     var splitedData = split(data);
     var T = splitedData[0];
     var logT = splitedData[1];
@@ -201,12 +203,17 @@ function parsing(Bdata) { //将Bdata解析为可处理的string/json/HTML等
 }
 
 function csvToAry(c) {
-    tempAry = c.split("\n"); //look like [["2,3,4,5"],[...],...]
-    for (var i = 0; i < tempAry.length - 1; i++) {  //最后是一个空字符串
+    var tempAry = c.split("\n"); //look like [["2,3,4,5"],[...],...]
+	var startLine = 0;
+	if (tempAry[0].match("names")) {  //如果首行能匹配到names
+		signalNames = signalNames.concat(tempAry[0].split(",").slice(1));  //slice截取，忽略"names"
+		startLine = 1;
+	};
+    for (var i = startLine; i < tempAry.length - 1; i++) {  //最后是一个空字符串
 		tempAry[i] = tempAry[i].split(",").map(s => +s); //look like [[2,3,4,5],[...]]
     }
-    var amount = tempAry[0].length - 1; //一个csv中所包含的信号数量
-    if (headByValue)  //如果用户选择使用value来限定范围。这个判断方式使得headByValue不能为0
+    var amount = tempAry[1].length - 1; //一个csv中所包含的信号数量，以第二行判断，避开名称行
+    if (headByValue)  //!!!如果用户选择使用value来限定范围。这个判断方式使得headByValue不能为0
 	{
 		for (var i = 0; i < amount; i++) {
 			var data = [];
@@ -214,8 +221,10 @@ function csvToAry(c) {
 				if ((tempAry[j][0] > headByValue) && (tempAry[j][0] < endByValue))
 					data.push([tempAry[j][0], tempAry[j][i + 1]]); //get data like [[2,3],[...],...]
 			}
+			if (!startLine)   //无名称行时
+			    signalNames.push("auto No."+num.toString());
 			signals.push(new signal(data));
-			var signalOption = new Option(num.toString(), num);
+			var signalOption = new Option(signalNames[num], num);
 			IDselecter.options.add(signalOption);
 			num++; //将每一个新信号，添加进选择框
 		}
@@ -234,8 +243,10 @@ function csvToAry(c) {
 			for (var j = head; j < end; j++) {
 				data.push([tempAry[j][0], tempAry[j][i + 1]]); //get data like [[2,3],[...],...]
 			}
+			if (!startLine)   //无名称行时
+			    signalNames.push("auto No."+num.toString());
 			signals.push(new signal(data));
-			var signalOption = new Option(num.toString(), num);
+			var signalOption = new Option(signalNames[num], num);
 			IDselecter.options.add(signalOption);
 			num++; //将每一个新信号，添加进选择框
 		}

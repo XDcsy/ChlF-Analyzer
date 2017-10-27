@@ -1,9 +1,7 @@
 # ChlF-Analyzer
 ## Todo
 重写拟合的方法<br>
-能够记录读取到的每个信号的名称<br>
 划定特征点范围后到求极值这部分的代码需要改动（关于是否只用第一个信号为参考，需要考虑）<br>
-传csv改为传json<br>
 图表不再使用font-awesome，改为使用jqui<br>
 echarts和jqui改为使用最小文件<br>
 解决使用datazoom后选择特征点的bug（暂时注释了datazoom）<br>
@@ -21,4 +19,5 @@ echarts和jqui改为使用最小文件<br>
 ~~根据需求调整界面~~<br>
 ~~实现预选择x轴范围的功能<br>~~
 ~~实现导出的功能<br>~~
+~~能够记录读取到的每个信号的名称<br>~~
 
