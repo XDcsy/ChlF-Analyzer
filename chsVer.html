@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>叶绿素荧光信号分析软件</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="css/pub.css">
+	<link rel="stylesheet" type="text/css" href="css/demo.css">
+	<link rel="stylesheet" type="text/css" href="css/animate.min.css">
+	<link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css">
+	<link rel="stylesheet" type="text/css" href="font-awesome-4.7.0/css/font-awesome.min.css">
+    <script type="text/javascript" src="js/xlsx.full.min.js"></script>
+	<script type="text/javascript" src="js/echarts.js"></script>
+	<script type="text/javascript" src="js/dark.js"></script>
+	<script type="text/javascript" src="js/ecStat.js"></script>
+	<script type="text/javascript" src="js/jquery-2.0.0.js"></script>
+	<script type="text/javascript" src="js/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="js/Blob.js"></script>
+	<script type="text/javascript" src="js/FileSaver.js"></script>
+  <style>
+  #accordion {
+
+  }
+  #h3 {
+        opacity: 0.6;
+border: 0px;
+
+  }
+  </style>
+</head>
+<body>
+	<div class="wrapper">
+		<div class="banner">
+			<div class="container">
+				<div class="ctn-name">叶绿素荧光信号分析软件</div>
+				<div class="right-info">
+					<div class="mail">江南大学</div>
+				</div>
+			</div>
+		</div>
+		<div class="content">
+			<!-- 第一页 -->
+			<div class="content-edit">
+				<div class="ctn-text">
+					<p class="big-p">叶绿素荧光信号分析软件</p>
+					<p class="small-p">● 此软件可帮助用户进行叶绿素荧光信号的分析。</p>
+					<p class="small-p">● 选择含有信号的的表格文件（.xls 或.xlsx格式），然后点击“继续”。</p>
+				</div>
+				<div class="ctn-btns">
+					<div class="btn btn-sel hvr-fade" id="sel">选择文件</div>
+					<input type="file" name="" id="files" style="display: none;" multiple>
+					<div class="btn btn-cot hvr-fade" id="next">继续</div>
+				</div>
+
+					<div id="accordion">
+					    <h3 id="h3">高级设置</h3>
+						<div>
+					        <p class="small-p">● 点击 <u>这里</u> 查看表格格式与模板。</p>
+					        <p class="small-p">● 点击 <u class="dialog-trigger" id="trigger1">这里</u> 以在表格中筛选信号的范围。</p>
+							<p class="small-p">● 点击 <u>这里</u> 切换分析时所使用的算法。</p>
+						</div>
+					</div>
+
+			</div>
+			<!-- 第二页 -->
+			<div class="cont" style="display:none;">
+				<div class="cont-text">
+					<p class="big-p">预选择特征点范围</p>
+					<p class="small-p">使用右上角的选择工具，刷出特征点存在的大致区间。</p>
+					<p class="small-p">使用保持工具可以同时刷出多个区间。</p>
+					<p class="small-p">点击 <u class="dialog-trigger" id="trigger2">这里</u> 可以直接通过下标或值来添加一个区间。</p>
+					<div class="ctn" id="chart0"></div>
+				</div>
+				<div class="btn btn-cot1 hvr-fade" id="next2">继续</div>
+			</div>
+			<!-- 第三页 -->
+			<div class="chart-display" style="display:none;">
+				<ul class="left-ctn">
+					<li id="chart1"></li>
+					<li id="chart2"></li>
+					<li id="chart3"></li>
+					<li id="chart4"></li>
+				</ul>
+				<div class="right-ctn">
+					<div class="form-group">
+					    <p style="font-size:25px;">操作区域</p>
+					</div>
+					<hr>
+					<div class="form-group">
+						<p>选择信号</p>
+						<select id="IDselecter" class="sel">
+						</select>
+					</div>
+					<hr>
+					<div class="form-group">
+						<p>切换信号</p>
+						<div class="right-btn">
+							<div class="bt left" id="preChartBtn"><i class="fa fa-angle-left"></i></div>
+							<div class="bt right " id="nextChartBtn"><i class="fa fa-angle-right"></i></div>
+						</div>
+					</div>
+					<hr>
+					<div class="form-group">
+						<p>移动特征点</p>
+						<div class="right-btn">
+							<div class="bt left" id="leftBtn"><i class="fa fa-angle-left"></i></div>
+							<div class="bt right " id="rightBtn"><i class="fa fa-angle-right"></i></div>
+						</div>
+					</div>
+					<hr>
+					<div class="form-group" style="margin-top:80px;">
+						<div class="btns" id="result">查看结果</div>
+						<div class="btns" id="xlsx">导出表格</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+<!-- 弹出框 -->
+	<div id="dialog1" title="范围筛选">
+        <ul>
+            <li><a href="#dialog1-tabs1">按下标</a></li>
+            <li><a href="#dialog1-tabs2">按值</a></li>
+        </ul>
+        <div id="dialog1-tabs1">
+            <p>筛选出下标在此范围内的点：</p>
+			<label for="dialog1-index-min">下标最小值: </label>
+            <input id="dialog1-index-min">
+			<br>
+			<label for="dialog1-index-max">下标最大值: </label>
+            <input id="dialog1-index-max">
+			<br>
+			<button id="dialog1-btn1">确定</button>
+        </div>
+        <div id="dialog1-tabs2">
+            <p>筛选出值在此范围内的点：</p>
+			<label for="dialog1-value-min">信号最小值: </label>
+            <input id="dialog1-value-min">
+			<br>
+			<label for="dialog1-value-max">信号最大值: </label>
+            <input id="dialog1-value-max">
+			<br>
+			<button id="dialog1-btn2">确定</button>
+        </div>
+	</div>
+		
+	<div id="dialog2" title="添加一个区域">
+        <ul>
+            <li><a href="#dialog2-tabs1">按下标</a></li>
+            <li><a href="#dialog2-tabs2">按值</a></li>  
+        </ul>
+        <div id="dialog2-tabs1">
+			<p>区域的X轴下标范围：</p>
+			<label for="dialog2-index-min">最小下标: </label>
+            <input id="dialog2-index-min">
+			<br>
+			<label for="dialog2-index-max">最大下标: </label>
+            <input id="dialog2-index-max">
+			<br>
+			<button id="dialog2-btn1">确定</button>
+        </div>
+        <div id="dialog2-tabs2">
+			<p>区域的X轴值域</p>
+			<label for="dialog2-value-min">最小值: </label>
+            <input id="dialog2-value-min">
+			<br>
+			<label for="dialog2-value-max">最大值: </label>
+            <input id="dialog2-value-max">
+			<br>
+			<button id="dialog2-btn2">确定</button>
+        </div>
+	</div>
+	
+	<div id="dialog3" title="表格格式与模板">
+	<p><strong>基本格式：</strong></p>
+	<p>表格的第一竖列应为输入信号中各点的x轴坐标。<br>
+	第二列起，每一列表示一个信号。<br>
+	每一格代表对应信号在相应x坐标处的值。<br>
+	</p>
+	<p><strong>可以给每个信号进行命名：</strong></p>
+	<p>表格左上方的第一个单元格可设置是否使用信号名称。<br>
+	当这个单元格的内容为"names"时，代表这行的后续单元格内均为信号名称。<br>
+	此时表格的格式如下表所示：
+	</p>
+<table border="1">
+  <tr>
+    <th>&nbspnames&nbsp;</th>
+    <th>&nbsp;信号名称&nbsp;</th>
+    <th>&nbsp;信号名称&nbsp;</th>
+    <th>&nbsp;……&nbsp;</th>
+  </tr>
+  <tr>
+    <td>&nbsp;值（x）&nbsp;</td>
+    <td>&nbsp;值（y）&nbsp;</td>
+    <td>&nbsp;值（y）&nbsp;</td>
+    <td>&nbsp;……&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;值（x）&nbsp;</td>
+    <td>&nbsp;值（y）&nbsp;</td>
+    <td>&nbsp;值（y）&nbsp;</td>
+    <td>&nbsp;……&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;值（x）&nbsp;</td>
+    <td>&nbsp;值（y）&nbsp;</td>
+    <td>&nbsp;值（y）&nbsp;</td>
+    <td>&nbsp;……&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;值（x）&nbsp;</td>
+    <td>&nbsp;值（y）&nbsp;</td>
+    <td>&nbsp;值（y）&nbsp;</td>
+    <td>&nbsp;……&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;……&nbsp;</td>
+    <td>&nbsp;……&nbsp;</td>
+    <td>&nbsp;……&nbsp;</td>
+    <td>&nbsp;……&nbsp;</td>
+  </tr>
+</table>
+<p>如果不使用表格名称，软件会给所有信号分配自动生成的编号。<br>
+此时的表格格式如下表所示：</p>
+
+<table border="1">
+  <tr>
+    <td>&nbsp;值（x）&nbsp;</td>
+    <td>&nbsp;值（y）&nbsp;</td>
+    <td>&nbsp;值（y）&nbsp;</td>
+    <td>&nbsp;……&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;值（x）&nbsp;</td>
+    <td>&nbsp;值（y）&nbsp;</td>
+    <td>&nbsp;值（y）&nbsp;</td>
+    <td>&nbsp;……&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;值（x）&nbsp;</td>
+    <td>&nbsp;值（y）&nbsp;</td>
+    <td>&nbsp;值（y）&nbsp;</td>
+    <td>&nbsp;……&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;值（x）&nbsp;</td>
+    <td>&nbsp;值（y）&nbsp;</td>
+    <td>&nbsp;值（y）&nbsp;</td>
+    <td>&nbsp;……&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;……&nbsp;</td>
+    <td>&nbsp;……&nbsp;</td>
+    <td>&nbsp;……&nbsp;</td>
+    <td>&nbsp;……&nbsp;</td>
+  </tr>
+</table>
+
+<p>如果您对于表格格式仍有疑问，可以点击<a href="模板.xml"><u><font color="blue"> 此处 </font></u></a>下载一个模板。</p>
+
+	</div>
+	
+<div id="dialog4" title="算法设置">
+    <legend>Rental Car</legend>
+    <div class="controlgroup">
+      <select id="car-type">
+        <option>Compact car</option>
+        <option>Midsize car</option>
+        <option>Full size car</option>
+        <option>SUV</option>
+        <option>Luxury</option>
+        <option>Truck</option>
+        <option>Van</option>
+      </select>
+      <label for="transmission-standard">Standard</label>
+      <input type="radio" name="transmission" id="transmission-standard">
+      <label for="transmission-automatic">Automatic</label>
+      <input type="radio" name="transmission" id="transmission-automatic">
+      <label for="insurance">Insurance</label>
+      <input type="checkbox" name="insurance" id="insurance">
+      <label for="horizontal-spinner" class="ui-controlgroup-label"># of cars</label>
+      <input id="horizontal-spinner" class="ui-spinner-input">
+      <button>Book Now!</button>
+    </div>
+</div>
+
+    <script type="text/javascript" src="js/chart0.js"></script>
+	<script type="text/javascript" src="js/dialog.js"></script>
+	<script type="text/javascript" src="js/charts.js"></script>
+	<script type="text/javascript" src="js/parse.js"></script>
+	<script type="text/javascript" src="js/demo.js"></script>
+	<script type="text/javascript" src="js/output.js"></script>
+</body>
+</html>
