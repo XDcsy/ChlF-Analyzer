@@ -1,7 +1,13 @@
 //before parse.js
 var head, end, headByValue, endByValue;
 var regions=[];
-
+$( "#accordion" ).accordion({
+    collapsible: true,
+	active:false
+});
+$( "#dialog0" ).dialog({ autoOpen: false, width: 480, height: 700 });
+$( "#dialog3" ).dialog({ autoOpen: false, width: 600, height: 700 });
+$( ".controlgroup" ).controlgroup();
 
 $( "#dialog1" ).dialog({ autoOpen: false });
 $( "#dialog1" ).tabs();
@@ -36,18 +42,28 @@ function addArea(isValue) {
 		for (var i = 0; i < range.length; i++) { //对每一个区域
 		    var startIndex = range[i][0];  //它的首尾index值
 			var endIndex = range[i][range[i].length-1];
-			regions.push([signals[0].data[startIndex][0], signals[0].data[endIndex][0]]); //对应到signals0的横坐标，添加至rigions
+			try {
+				regions.push([signals[0].data[startIndex][0], signals[0].data[endIndex][0]]); //对应到signals0的横坐标，添加至rigions
+			}
+			catch(error) {
+				alert("Value out of range");
+			}
 		}
 	}
 	if (isValue) {
 	    var start = parseInt($("#dialog2-value-min").val());
-	    var end = parseInt($("#dialog2-value-max").val());
-	    regions.push([start, end]);  //用value表示的本次要添加的区域
+	    var fin = parseInt($("#dialog2-value-max").val());
+	    regions.push([start, fin]);  //用value表示的本次要添加的区域
 	}
 	else {
 	    var start = parseInt($("#dialog2-index-min").val());
-	    var end = parseInt($("#dialog2-index-max").val());
-		regions.push([signals[0].data[start][0], signals[0].data[end][0]]);  //用index表示的话，利用signals[0]对应到value再添加
+	    var fin = parseInt($("#dialog2-index-max").val());
+		try {
+			regions.push([signals[0].data[start][0], signals[0].data[fin][0]]);  //用index表示的话，利用signals[0]对应到value再添加
+		}
+		catch(error) {
+			alert("Index out of range");
+		}
 	}
 	//构造对象
 	var areaObjAry = [];
@@ -85,4 +101,10 @@ $( "#trigger1" ).click(function() {
 });
 $( "#trigger2" ).click(function() {
     $( "#dialog2" ).dialog( "open" );
+});
+$( "#trigger0" ).click(function() {
+    $( "#dialog0" ).dialog( "open" );
+});
+$( "#trigger3" ).click(function() {
+    $( "#dialog3" ).dialog( "open" );
 });

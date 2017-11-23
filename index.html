@@ -35,12 +35,19 @@
 					<p class="big-p">ChlF Analyzer</p>
 					<p class="small-p">This analyzer helps you locate the feature points of chlorophyll fluorescence signals.</p>
 					<p class="small-p">Input .xls or .xlsx files and click "Continue".</p>
-					<p class="small-p">Click <u class="dialog-trigger" id="trigger1">here</u> if you want to discard some points in your workbooks.</p>
 				</div>
 				<div class="ctn-btns">
 					<div class="btn btn-sel hvr-fade" id="sel">Select files</div>
 					<input type="file" name="" id="files" style="display: none;" multiple>
 					<div class="btn btn-cot hvr-fade" id="next">Continue</div>
+				</div>
+				<div id="accordion">
+				    <h3 id="adv-setting">高级设置</h3>
+					<div>
+			            <p class="small-p">● 点击 <u class="dialog-trigger" id="trigger0">这里</u> 查看表格格式与模板。</p>
+				        <p class="small-p">● 点击 <u class="dialog-trigger" id="trigger1">这里</u> 进行数据预筛选。</p>
+						<p class="small-p">● 点击 <u class="dialog-trigger" id="trigger3">这里</u> 设置分析时所使用的算法。</p>
+					</div>
 				</div>
 			</div>
 			<div id="copyright" style="margin-top:30px; margin-left:50px; font-size:65px; font-weight:bold; color:#fff;">Laboratory of Bioinstrumentation, Jiangnan University</div>
@@ -154,8 +161,156 @@
         </div>
 	</div>
 
+	<div id="dialog0" title="表格格式与模板">
+		<p><strong>基本格式：</strong></p>
+		<p>表格的第一竖列应为输入信号中各点的x轴坐标。<br>
+		第二列起，每一列表示一个信号。<br>
+		每一格代表对应信号在相应x坐标处的值。<br>
+		</p>
+		<p><strong>可以给每个信号进行命名：</strong></p>
+		<p>表格左上方的第一个单元格可设置是否使用信号名称。<br>
+		当这个单元格的内容为"names"时，代表这行的后续单元格内均为信号名称。<br>
+		此时表格的格式如下表所示：
+		</p>
+	<table border="1">
+        <tr>
+			<th>&nbspnames&nbsp;</th>
+			<th>&nbsp;信号名称&nbsp;</th>
+			<th>&nbsp;信号名称&nbsp;</th>
+			<th>&nbsp;……&nbsp;</th>
+		</tr>
+		<tr>
+			<td>&nbsp;值（x）&nbsp;</td>
+			<td>&nbsp;值（y）&nbsp;</td>
+			<td>&nbsp;值（y）&nbsp;</td>
+			<td>&nbsp;……&nbsp;</td>
+		</tr>
+		<tr>
+			<td>&nbsp;值（x）&nbsp;</td>
+			<td>&nbsp;值（y）&nbsp;</td>
+			<td>&nbsp;值（y）&nbsp;</td>
+			<td>&nbsp;……&nbsp;</td>
+		</tr>
+		<tr>
+			<td>&nbsp;值（x）&nbsp;</td>
+			<td>&nbsp;值（y）&nbsp;</td>
+			<td>&nbsp;值（y）&nbsp;</td>
+			<td>&nbsp;……&nbsp;</td>
+		</tr>
+		<tr>
+			<td>&nbsp;值（x）&nbsp;</td>
+			<td>&nbsp;值（y）&nbsp;</td>
+			<td>&nbsp;值（y）&nbsp;</td>
+			<td>&nbsp;……&nbsp;</td>
+		</tr>
+		<tr>
+			<td>&nbsp;……&nbsp;</td>
+			<td>&nbsp;……&nbsp;</td>
+			<td>&nbsp;……&nbsp;</td>
+			<td>&nbsp;……&nbsp;</td>
+		</tr>
+	</table>
+	<p>如果不使用表格名称，软件会给所有信号分配自动生成的编号。<br>
+	此时的表格格式如下表所示：</p>
+	<table border="1">
+		<tr>
+			<td>&nbsp;值（x）&nbsp;</td>
+			<td>&nbsp;值（y）&nbsp;</td>
+			<td>&nbsp;值（y）&nbsp;</td>
+			<td>&nbsp;……&nbsp;</td>
+		</tr>
+		<tr>
+			<td>&nbsp;值（x）&nbsp;</td>
+			<td>&nbsp;值（y）&nbsp;</td>
+			<td>&nbsp;值（y）&nbsp;</td>
+			<td>&nbsp;……&nbsp;</td>
+		</tr>
+		<tr>
+			<td>&nbsp;值（x）&nbsp;</td>
+			<td>&nbsp;值（y）&nbsp;</td>
+			<td>&nbsp;值（y）&nbsp;</td>
+			<td>&nbsp;……&nbsp;</td>
+		</tr>
+		<tr>
+			<td>&nbsp;值（x）&nbsp;</td>
+			<td>&nbsp;值（y）&nbsp;</td>
+			<td>&nbsp;值（y）&nbsp;</td>
+			<td>&nbsp;……&nbsp;</td>
+		</tr>
+		<tr>
+			<td>&nbsp;……&nbsp;</td>
+		<td>&nbsp;……&nbsp;</td>
+			<td>&nbsp;……&nbsp;</td>
+			<td>&nbsp;……&nbsp;</td>
+		</tr>
+	</table>
+	<p>在这里<a href="模板.xml"><u><font color="blue"> 查看模板 </font></u></a>。</p>
+	</div>
+
+	<div id="dialog3" title="算法设置">
+		<div class="controlgroup">
+		<div>
+		<p><strong>● 分析方式：</strong></p>
+		<select id="type">
+			<option>曲率（默认）</option>
+			<option>频域变换（FFT）</option>
+			<option>小波变换（Wavelet）</option>
+			<option>经验模态分解（EMD）</option>
+		</select>
+		</div>
+		<div>
+			<fieldset>
+				<legend>说明</legend>
+				<p>“小波变换（Wavelet）”：展示输入信号经小波变换后的图形用于分析。小波变换是空间（时间）和频率的局部变换，能有效地从信号中提取信息。</p>
+			</fieldset>
+		</div>
+		<div>
+			<br>
+			<p><strong>● 图形拟合方式：</strong></p>
+			<label for="transmission-standard">对数坐标计算（默认）</label>
+			<input type="radio" name="transmission" id="transmission-standard">
+			<label for="transmission-automatic">线性坐标计算</label>
+			<input type="radio" name="transmission" id="transmission-automatic">
+		</div>
+		<div>
+			<fieldset>
+				<legend>说明</legend>
+				<p>“对数坐标计算”：程序在处理信号时，首先将信号的x轴坐标进行对数运算，即取x'=log(x)，以变换后的图形进行拟合。</p>
+			</fieldset>
+		</div>
+		<div>
+			<br>
+			拟合阶数：
+			<input id="horizontal-spinner" class="ui-spinner-input">
+		</div>
+		<div>
+			<br>
+			<p><strong>● 特征点定位规则：</strong></p>
+			<label for="onlyone">范围内首个点（默认）</label>
+			<input type="radio" name="rules" id="onlyone">
+			<label for="multiple">范围内全部点</label>
+			<input type="radio" name="rules" id="multiple">
+		</div>
+		<div>
+			<fieldset>
+				<legend>说明</legend>
+				<p>“范围内首个点”：程序在找到给定范围内的首个特征点后停止继续搜索。</p>
+			</fieldset>
+		</div>
+		<div>
+			<br>
+			<p><strong>● 渲染方式：</strong>（打开快速渲染时，在数据点密集处，程序会使用降采样等方式优化图形显示，以提高性能）</p>
+			<label for="fast">快速渲染</label>
+			<input type="checkbox" name="fast" id="fast">
+		</div>
+	  <br><hr>
+      <button>确定</button>
+    </div>
+</div>
+
+
     <script type="text/javascript" src="js/chart0.js"></script>
-	<script type="text/javascript" src="js/dialog.js"></script>
+	<script type="text/javascript" src="js/interact.js"></script>
 	<script type="text/javascript" src="js/charts.js"></script>
 	<script type="text/javascript" src="js/parse.js"></script>
 	<script type="text/javascript" src="js/demo.js"></script>

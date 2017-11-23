@@ -1,7 +1,7 @@
 
 .content-edit{
 	width: 640px;
-	height: 350px;
+	height: 350px; /* 首页容器的宽度 */
 	margin: 0px auto;
 	margin-top:200px;
 	padding: 40px;
@@ -16,6 +16,10 @@
 .small-p{
 	font-size:20px;
 	color:rgba(0,0,0,0.5);
+}
+#adv-setting {
+    opacity: 0.6;
+    border: 0px;
 }
 .dialog-trigger{
 	cursor: pointer;
