@@ -42,7 +42,7 @@ border: 0px;
 			<div class="content-edit">
 				<div class="ctn-text">
 					<p class="big-p">叶绿素荧光信号分析软件</p>
-					<p class="small-p">● 此软件可帮助用户进行叶绿素荧光信号的分析。</p>
+					<p class="small-p">● 此软件可帮助用户进行叶绿素荧光信号的分析，提供通过曲率、频域变换等方式确定并调整信号特征点等功能。</p>
 					<p class="small-p">● 选择含有信号的的表格文件（.xls 或.xlsx格式），然后点击“继续”。</p>
 				</div>
 				<div class="ctn-btns">
@@ -55,8 +55,8 @@ border: 0px;
 					    <h3 id="h3">高级设置</h3>
 						<div>
 					        <p class="small-p">● 点击 <u>这里</u> 查看表格格式与模板。</p>
-					        <p class="small-p">● 点击 <u class="dialog-trigger" id="trigger1">这里</u> 以在表格中筛选信号的范围。</p>
-							<p class="small-p">● 点击 <u>这里</u> 切换分析时所使用的算法。</p>
+					        <p class="small-p">● 点击 <u class="dialog-trigger" id="trigger1">这里</u> 进行数据预筛选。</p>
+							<p class="small-p">● 点击 <u>这里</u> 设置分析时所使用的算法。</p>
 						</div>
 					</div>
 
@@ -64,7 +64,7 @@ border: 0px;
 			<!-- 第二页 -->
 			<div class="cont" style="display:none;">
 				<div class="cont-text">
-					<p class="big-p">预选择特征点范围</p>
+					<p class="big-p">特征点粗定位</p>
 					<p class="small-p">使用右上角的选择工具，刷出特征点存在的大致区间。</p>
 					<p class="small-p">使用保持工具可以同时刷出多个区间。</p>
 					<p class="small-p">点击 <u class="dialog-trigger" id="trigger2">这里</u> 可以直接通过下标或值来添加一个区间。</p>
@@ -82,7 +82,7 @@ border: 0px;
 				</ul>
 				<div class="right-ctn">
 					<div class="form-group">
-					    <p style="font-size:25px;">操作区域</p>
+					    <p style="font-size:25px;">特征点精确定位</p>
 					</div>
 					<hr>
 					<div class="form-group">
@@ -110,6 +110,7 @@ border: 0px;
 					<div class="form-group" style="margin-top:80px;">
 						<div class="btns" id="result">查看结果</div>
 						<div class="btns" id="xlsx">导出表格</div>
+						<div class="btns" id="xlsx">返回</div>
 					</div>
 				</div>
 			</div>
@@ -117,7 +118,7 @@ border: 0px;
 	</div>
 	
 <!-- 弹出框 -->
-	<div id="dialog1" title="范围筛选">
+	<div id="dialog1" title="数据预筛选">
         <ul>
             <li><a href="#dialog1-tabs1">按下标</a></li>
             <li><a href="#dialog1-tabs2">按值</a></li>
@@ -144,7 +145,7 @@ border: 0px;
         </div>
 	</div>
 		
-	<div id="dialog2" title="添加一个区域">
+	<div id="dialog2" title="添加区域">
         <ul>
             <li><a href="#dialog2-tabs1">按下标</a></li>
             <li><a href="#dialog2-tabs2">按值</a></li>  
@@ -256,31 +257,76 @@ border: 0px;
   </tr>
 </table>
 
-<p>如果您对于表格格式仍有疑问，可以点击<a href="模板.xml"><u><font color="blue"> 此处 </font></u></a>下载一个模板。</p>
+<p>在这里<a href="模板.xml"><u><font color="blue"> 查看模板 </font></u></a>。</p>
 
 	</div>
 	
 <div id="dialog4" title="算法设置">
-    <legend>Rental Car</legend>
     <div class="controlgroup">
-      <select id="car-type">
-        <option>Compact car</option>
-        <option>Midsize car</option>
-        <option>Full size car</option>
-        <option>SUV</option>
-        <option>Luxury</option>
-        <option>Truck</option>
-        <option>Van</option>
+      <div>
+	  <p><strong>● 分析方式：</strong></p>
+	  <select id="type">
+        <option>曲率（默认）</option>
+        <option>频域变换（FFT）</option>
+        <option>小波变换（Wavelet）</option>
+        <option>经验模态分解（EMD）</option>
       </select>
-      <label for="transmission-standard">Standard</label>
+	  </div>
+      <div>
+	  <fieldset>
+        <legend>说明</legend>
+           <p>“小波变换（Wavelet）”：展示输入信号经小波变换后的图形用于分析。小波变换是空间（时间）和频率的局部变换，能有效地从信号中提取信息。</p>
+      </fieldset>
+	  </div>
+	  
+	  
+	  <div>
+      <br>
+	  <p><strong>● 图形拟合方式：</strong></p>
+	  <label for="transmission-standard">对数坐标计算（默认）</label>
       <input type="radio" name="transmission" id="transmission-standard">
-      <label for="transmission-automatic">Automatic</label>
+      <label for="transmission-automatic">线性坐标计算</label>
       <input type="radio" name="transmission" id="transmission-automatic">
-      <label for="insurance">Insurance</label>
-      <input type="checkbox" name="insurance" id="insurance">
-      <label for="horizontal-spinner" class="ui-controlgroup-label"># of cars</label>
-      <input id="horizontal-spinner" class="ui-spinner-input">
-      <button>Book Now!</button>
+	  </div>
+	  <div>
+      <fieldset>
+        <legend>说明</legend>
+		   <p>“对数坐标计算”：程序在处理信号时，首先将信号的x轴坐标进行对数运算，即取x'=log(x)，以变换后的图形进行拟合。</p>
+      </fieldset>
+	  </div>
+	  
+	  <div>
+		<br>
+		拟合阶数：
+		<input id="horizontal-spinner" class="ui-spinner-input">
+	  </div>
+	  
+	  
+	  <div>
+	  <br>
+	  <p><strong>● 特征点定位规则：</strong></p>
+	  <label for="onlyone">范围内首个点（默认）</label>
+      <input type="radio" name="rules" id="onlyone">
+      <label for="multiple">范围内全部点</label>
+      <input type="radio" name="rules" id="multiple">
+	  </div>
+	  <div>
+      <fieldset>
+        <legend>说明</legend>
+		   <p>“范围内首个点”：程序在找到给定范围内的首个特征点后停止继续搜索。</p>
+      </fieldset>
+	  </div>
+	  
+	  
+	  <div>
+	  <br>
+      <p><strong>● 渲染方式：</strong>（打开快速渲染时，在数据点密集处，程序会使用降采样等方式优化图形显示，以提高性能）</p>
+	  <label for="fast">快速渲染</label>
+      <input type="checkbox" name="fast" id="fast">
+	  </div>
+
+	  <br><hr>
+      <button>确定</button>
     </div>
 </div>
 
