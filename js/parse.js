@@ -1,3 +1,4 @@
+linear = false;
 var chart1, chart2, chart3, chart4;
 var chartAry = [];
 // Setup the listeners.
@@ -66,7 +67,7 @@ function nextChart(){
 //判断浏览器是否支持FileReader.readAsBinaryString
 var rABS = typeof FileReader !== "undefined" && typeof FileReader.prototype !== "undefined" && typeof FileReader.prototype.readAsBinaryString !== "undefined";
 
-var signals = [];
+signals = [];
 var num = 0; //记录signal的序号
 var signalNames = [];  //记录signal的名称
 var index;  //记录特征点的范围
@@ -119,6 +120,27 @@ function signal(data) { //构造函数
         }
         return c;
     }
+	function calculateSampleX(rangeStart,rangeEnd,num){
+		var sampleX = [];
+		var step = (rangeEnd - rangeStart)/(num - 1);
+		var temp = rangeStart;
+		sampleX.push(temp);
+		for (var i = 0; i < num - 1; i++) {
+			temp = temp + step;
+			sampleX.push(temp);
+		}
+		return sampleX;
+	}
+	function calculateSampleY(x, reg){
+		var sampleY = [];
+		for (var i = 0; i < x.length; i++) {
+			var temp = 0;
+			for (var n=0; n < reg.parameter.length;n++)
+				temp += reg.parameter[n]*Math.pow(x[i],n);
+			sampleY.push(temp);
+		}
+		return sampleY;
+	}
 	
     this.data = data; //t,y
     this.num = num;
@@ -129,22 +151,80 @@ function signal(data) { //构造函数
     var Y = splitedData[2];
 
     this.logData = combine(logT, Y); //log(t),y  仅用作拟合，不用于画图
-    reg = ecStat.regression('polynomial', this.logData, 16);  //以log(t),y 进行拟合
-    this.regression = reg;
+    if (linear) {
+		var linearReg = ecStat.regression('polynomial', data, 16);  //以t,y 进行拟合
+		this.regression = linearReg;
+		//以回归后函数进行均匀采样
+		var samplePointsNum = Math.pow(2, Math.floor(Math.log(data.length) / Math.LN2)); //采样点个数：为最接近原数据点个数的2的整次幂
+		var sampleX = calculateSampleX(T[0],T[T.length-1],samplePointsNum);
+		var sampleY = calculateSampleY(sampleX, linearReg);
+		//以下以sampleY计算FFT及wavelet
+		//fft
+		var complexY = [];
+		var fftX = [];
+		var fftY = [];
+		for (var i = 0; i < sampleY.length; i++) {
+			complexY.push(new Complex(sampleY[i], 0)); //实部sampleY[i]，虚部0
+		}
+		var fftComplexResult = ft.FFT(complexY);
+		for (var i = 0; i < fftComplexResult.length; i++) {
+			fftX.push(fftComplexResult[i].re);
+		    fftY.push(fftComplexResult[i].im);
+		}
+		this.fft = combine(fftX, fftY);
+		//wavelet
+		waveletY = haarWaveletTransform(sampleY);
+		this.wavelet = combine(sampleX, waveletY)
+        //曲率
+		var d1Y = getDerivative(1, T, linearReg.parameter);
+		var d2Y = getDerivative(2, T, linearReg.parameter);
+		var cY = getCurvature(d1Y, d2Y);
+		this.C = cY;
+		this.d1Data = combine(T, d1Y); //t, dy
+		this.d2Data = combine(T, d2Y); //t, ddy
+		this.cData = combine(T, cY); //t, C
+		//this.d1 = d1();
+		//this.d2 = d2();
+	}
 	
-
-    var d1Y = getDerivative(1, logT, reg.parameter);
-    var d2Y = getDerivative(2, logT, reg.parameter);
-    var cY = getCurvature(d1Y, d2Y);
-	this.logC = cY;
-    //this.d1LogData = combine(logT, d1Y); //log(t),dy
-    //this.d2LogData = combine(logT, d2Y); //log(t),ddy
-    this.d1Data = combine(T, d1Y); //t, dy
-    this.d2Data = combine(T, d2Y); //t, ddy
-    this.cData = combine(T, cY); //t, log(c)
-    //this.cLogData = combine(logT, cY); //log(t), log(c)
-        //this.d1 = d1();
-        //this.d2 = d2();
+	else {
+		var reg = ecStat.regression('polynomial', this.logData, 16);  //以log(t),y 进行拟合
+		this.regression = reg;
+		//以回归后函数进行均匀采样
+		var samplePointsNum = Math.pow(2, Math.floor(Math.log(data.length) / Math.LN2)); //采样点个数：为最接近原数据点个数的2的整次幂
+		var sampleX = calculateSampleX(logT[0],logT[logT.length-1],samplePointsNum);
+		var sampleY = calculateSampleY(sampleX, reg);
+		//以下以sampleY计算FFT及wavelet
+		//fft
+		var complexY = [];
+		var fftX = [];
+		var fftY = [];
+		for (var i = 0; i < sampleY.length; i++) {
+			complexY.push(new Complex(sampleY[i], 0)); //实部sampleY[i]，虚部0
+		}
+		var fftComplexResult = ft.FFT(complexY);
+		for (var i = 0; i < fftComplexResult.length; i++) {
+			fftX.push(fftComplexResult[i].re);
+		    fftY.push(fftComplexResult[i].im);
+		}
+		this.fft = combine(fftX, fftY);
+		//wavelet
+		waveletY = haarWaveletTransform(sampleY);
+		this.wavelet = combine(sampleX, waveletY)
+		//曲率
+		var d1Y = getDerivative(1, logT, reg.parameter);
+		var d2Y = getDerivative(2, logT, reg.parameter);
+		var cY = getCurvature(d1Y, d2Y);
+		this.logC = cY;
+		//this.d1LogData = combine(logT, d1Y); //log(t),dy
+		//this.d2LogData = combine(logT, d2Y); //log(t),ddy
+		this.d1Data = combine(T, d1Y); //t, dy
+		this.d2Data = combine(T, d2Y); //t, ddy
+		this.cData = combine(T, cY); //t, log(c)
+		//this.cLogData = combine(logT, cY); //log(t), log(c)
+		//this.d1 = d1();
+		//this.d2 = d2();
+	}
 	this.featurePoints = [];
 }
 

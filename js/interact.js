@@ -1,6 +1,6 @@
 //before parse.js
 var head, end, headByValue, endByValue;
-var regions=[];
+var regions = [];
 $( "#accordion" ).accordion({
     collapsible: true,
 	active:false
