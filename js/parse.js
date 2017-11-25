@@ -67,7 +67,7 @@ function nextChart(){
 //判断浏览器是否支持FileReader.readAsBinaryString
 var rABS = typeof FileReader !== "undefined" && typeof FileReader.prototype !== "undefined" && typeof FileReader.prototype.readAsBinaryString !== "undefined";
 
-signals = [];
+var signals = [];
 var num = 0; //记录signal的序号
 var signalNames = [];  //记录signal的名称
 var index;  //记录特征点的范围
