@@ -1,4 +1,4 @@
-linear = false;
+linear = true;
 var chart1, chart2, chart3, chart4;
 var chartAry = [];
 // Setup the listeners.
@@ -177,8 +177,11 @@ function signal(data) { //构造函数
 		}
 		this.fft = combine(fftF,fftA);
 		//wavelet
-		waveletY = haarWaveletTransform(sampleY);
-		this.wavelet = combine(sampleX, waveletY);
+		var waveletY = haarWaveletTransform(sampleY);
+		var waveletResult = combine(sampleX, waveletY);  //x轴刻度均匀的小波结果
+		var waveletReg = ecStat.regression('polynomial', waveletResult, 16);  //拟合后重新对应到真实的点上
+		var waveletTY = calculateSampleY(T, waveletReg);
+		this.wavelet = combine(T, waveletTY);
         //曲率
 		var d1Y = getDerivative(1, T, linearReg.parameter);
 		var d2Y = getDerivative(2, T, linearReg.parameter);
@@ -219,8 +222,11 @@ function signal(data) { //构造函数
 		
 		
 		//wavelet
-		waveletY = haarWaveletTransform(sampleY);
-		this.wavelet = combine(sampleX, waveletY);
+		var waveletY = haarWaveletTransform(sampleY);
+		var waveletResult = combine(sampleX, waveletY);
+		var waveletReg = ecStat.regression('polynomial', waveletResult, 16);
+		var waveletTY = calculateSampleY(T, waveletReg);
+		this.wavelet = combine(T, waveletTY);
 		//曲率
 		var d1Y = getDerivative(1, logT, reg.parameter);
 		var d2Y = getDerivative(2, logT, reg.parameter);
