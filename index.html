@@ -100,6 +100,7 @@
 					</div>
 					<hr>
 					<div class="form-group" style="margin-top:80px;">
+						<div class="btns" id="showFFT">FFT</div>
 						<div class="btns" id="result">Results</div>
 						<div class="btns" id="xlsx">Save xlsx</div>
 					</div>
@@ -109,6 +110,11 @@
 	</div>
 	
 <!-- 弹出框 -->
+	<div id="dialogFFT" title="FFT" style="text-align:center;">
+		<div id="chartFFT" style="width: 750px; height: 530px; margin:0px auto;">
+		</div>
+	</div>
+	
 	<div id="dialog1" title="Discard points">
         <ul>
             <li><a href="#dialog1-tabs1">by index</a></li>
@@ -253,9 +259,9 @@
 		<div class="controlgroup">
 		<div>
 		<p><strong>● 分析方式：</strong></p>
-		<select id="type">
-			<option>曲率（默认）</option>
-			<option>小波变换（Wavelet）</option>
+		<select id="analyzeType">
+			<option value="curvature">曲率（默认）</option>
+			<option value="wavelet">小波变换（Wavelet）</option>
 		</select>
 		</div>
 		<div>
@@ -264,19 +270,19 @@
 				<p>“小波变换（Wavelet）”：展示输入信号经小波变换后的图形用于分析。小波变换是空间（时间）和频率的局部变换，能有效地从信号中提取信息。</p>
 			</fieldset>
 		</div>
-		<div>
+		<!--<div>
 			<br>
 			<p><strong>● 是否计算频谱：</strong>打开时，程序会对信号进行快速傅立叶变换（FFT），在分析时可以查看信号的频谱图。</p>
 			<label for="fft">计算频谱</label>
 			<input type="checkbox" name="fft" id="fft">
-		</div>
+		</div>-->
 		<div>
 			<br>
 			<p><strong>● 图形拟合方式：</strong></p>
-			<label for="transmission-standard">对数坐标计算（默认）</label>
-			<input type="radio" name="transmission" id="transmission-standard">
-			<label for="transmission-automatic">线性坐标计算</label>
-			<input type="radio" name="transmission" id="transmission-automatic">
+			<label for="reg-log">对数坐标计算（默认）</label>
+			<input type="radio" name="reg" id="reg-log">
+			<label for="reg-linear">线性坐标计算</label>
+			<input type="radio" name="reg" id="reg-linear">
 		</div>
 		<div>
 			<fieldset>
@@ -287,7 +293,7 @@
 		<div>
 			<br>
 			拟合阶数：
-			<input id="horizontal-spinner" class="ui-spinner-input">
+			<input id="horizontal-spinner" class="ui-spinner-input" value=16>
 		</div>
 		<div>
 			<br>
@@ -310,12 +316,13 @@
 			<input type="checkbox" name="fast" id="fast">
 		</div>
 	  <br><hr>
-      <button>确定</button>
+      <button id = "setting-ok">确定</button>
     </div>
 </div>
 
 
     <script type="text/javascript" src="js/chart0.js"></script>
+	<script type="text/javascript" src="js/chartFFT.js"></script>
 	<script type="text/javascript" src="js/interact.js"></script>
 	<script type="text/javascript" src="js/charts.js"></script>
 	<script type="text/javascript" src="js/parse.js"></script>

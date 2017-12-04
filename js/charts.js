@@ -1,5 +1,8 @@
+function initCharts(initOption) {
+var analyzeType = document.getElementById('analyzeType');
+
 //用于初始化的通用option
-var initOption = {
+initOption = {
 	title : { // 图表标题，可以通过show:true/false控制显示与否，还有subtext:'二级标题',link:'http://www.baidu.com'等
         text : 'Chart',
 		show: false,
@@ -8,7 +11,7 @@ var initOption = {
         trigger : 'axis'
     },
     legend : { // 这个就是图例，也就是每条折线或者项对应的示例
-        data : ["data", "curvature", "2ndDerivative", "1stDerivative"]//需要与series或data的名字一致
+        data : ["data", analyzeType.value, "2ndDerivative", "1stDerivative"]//需要与series或data的名字一致
     },
     toolbox : {
         feature : {
@@ -191,3 +194,5 @@ var initOption = {
         },
     ]
 };
+return initOption;
+}

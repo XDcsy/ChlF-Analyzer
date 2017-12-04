@@ -1,7 +1,8 @@
-linear = true;
-var chart1, chart2, chart3, chart4;
+
+var chart1, chart2, chart3, chart4, chartFFT;
 var chartAry = [];
 // Setup the listeners.
+var analyzeType = document.getElementById('analyzeType');
 var IDselecter = document.getElementById('IDselecter');
 //var notlog1 = document.getElementById('notlog1');
 //var log1 = document.getElementById('log1');
@@ -357,9 +358,17 @@ function preProcess() {
 	chart0 = echarts.init(document.getElementById('chart0'), "dark");
 	var next2 = document.getElementById('next2');
 	
-	for (var i = 0; i < signals.length; i++){
-		chart0Options.series.push({name:"signal"+i.toString(), type:"line", sampling:"average",symbol:"none", itemStyle:{normal:{color:"#A9A9A9"}},data:signals[i].cData}); //对chart0使用了sampling:"average"进行降采样，优化性能
-		chart0Options.series.push({name:"ssignal"+i.toString(), type:"scatter", symbolSize:3, z:100, data:signals[i].cData});  //brush只支持散点图，因此使用散点覆盖于line上方
+	if (analyzeType.value == "curvature") {
+		for (var i = 0; i < signals.length; i++){
+			chart0Options.series.push({name:"signal"+i.toString(), type:"line", sampling:"average",symbol:"none", itemStyle:{normal:{color:"#A9A9A9"}},data:signals[i].cData}); //对chart0使用了sampling:"average"进行降采样，优化性能
+			chart0Options.series.push({name:"ssignal"+i.toString(), type:"scatter", symbolSize:3, z:100, data:signals[i].cData});  //brush只支持散点图，因此使用散点覆盖于line上方
+		}
+	}
+	if (analyzeType.value == "wavelet") {
+		for (var i = 0; i < signals.length; i++){
+			chart0Options.series.push({name:"signal"+i.toString(), type:"line", sampling:"average",symbol:"none", itemStyle:{normal:{color:"#A9A9A9"}},data:signals[i].wavelet}); //对chart0使用了sampling:"average"进行降采样，优化性能
+			chart0Options.series.push({name:"ssignal"+i.toString(), type:"scatter", symbolSize:3, z:100, data:signals[i].wavelet});  //brush只支持散点图，因此使用散点覆盖于line上方
+		}
 	}
 	chart0.setOption(chart0Options, true);
 	chart0.on('brushselected', brushed);
@@ -401,7 +410,8 @@ function findMaxPoint(range) {
 				if ( (signals[k].cData[p][1] > signals[k].cData[p-1][1]) && (signals[k].cData[p][1] > signals[k].cData[p+1][1]) ) {
 					signals[k].featurePoints.push(p);  //signals[k].featurePoints存储的是特征点的index
 					find = true;
-					break;
+					if (onlyone)  //只寻找一个点时，找到后结束
+						break;
 				}
 				
 			}
@@ -428,53 +438,100 @@ function brushed(params) {
 //}
 
 function initMarkPoints(chart, chartNum) {
-	var pointsData = [], pointsC = [], pointsD1 = [], pointsD2 = [];
+	var pointsData = [], pointsC = [], pointsW = [], pointsD1 = [], pointsD2 = [];
 	for (i = 0; i < signals[chartNum].featurePoints.length; i++){
 		pointsData.push({coord:signals[chartNum].data[signals[chartNum].featurePoints[i]]});  //[{coord:[x, y]}, {coord:[x, y]}] 的对象数组
 		pointsC.push({coord:signals[chartNum].cData[signals[chartNum].featurePoints[i]]});
+		pointsW.push({coord:signals[chartNum].wavelet[signals[chartNum].featurePoints[i]]});
 		pointsD1.push({coord:signals[chartNum].d1Data[signals[chartNum].featurePoints[i]]});
 		pointsD2.push({coord:signals[chartNum].d2Data[signals[chartNum].featurePoints[i]]});
 	}
-	chart.setOption ({
-		series:[{
-            name: 'data',
-            markPoint: {data: pointsData},
-        },
-		{
-            name: 'curvature',
-            markPoint: {data: pointsC},
-		},
-		{
-            name: '2ndDerivative',
-            markPoint: {data: pointsD2},
-		},
-		{
-            name: '1stDerivative',
-            markPoint: {data: pointsD1},
-		}]
-	});
+	if (analyzeType.value == "curvature") {
+		chart.setOption ({
+			series:[{
+				name: 'data',
+				markPoint: {data: pointsData},
+			},
+			{
+				name: 'curvature',
+				markPoint: {data: pointsC},
+			},
+			{
+				name: '2ndDerivative',
+				markPoint: {data: pointsD2},
+			},
+			{
+				name: '1stDerivative',
+				markPoint: {data: pointsD1},
+			}]
+		});
+	}
+	if (analyzeType.value == "wavelet") {
+		chart.setOption ({
+			series:[{
+				name: 'data',
+				markPoint: {data: pointsData},
+			},
+			{
+				name: 'wavelet',
+				markPoint: {data: pointsW},
+			},
+			{
+				name: '2ndDerivative',
+				markPoint: {data: pointsD2},
+			},
+			{
+				name: '1stDerivative',
+				markPoint: {data: pointsD1},
+			}]
+		});
+	}
 }
 
 function changeData(chart, chartNum) {
-	chart.setOption ({
-		series:[{
-            name: 'data',
-            data: signals[chartNum].data
-        },
-		{
-            name: 'curvature',
-            data: signals[chartNum].cData
-		},
-		{
-            name: '2ndDerivative',
-            data: signals[chartNum].d2Data
-		},
-		{
-            name: '1stDerivative',
-            data: signals[chartNum].d1Data
-		}]
-	});
+	if (analyzeType.value == "curvature") {
+		chart.setOption ({
+			series:[{
+				name: 'data',
+				data: signals[chartNum].data
+			},
+			{
+				name: 'curvature',
+				data: signals[chartNum].cData
+			},
+			{
+				name: '2ndDerivative',
+				data: signals[chartNum].d2Data
+			},
+			{
+				name: '1stDerivative',
+				data: signals[chartNum].d1Data
+			}]
+		});
+	}
+	if (analyzeType.value == "wavelet") {
+		chart.setOption ({
+			series:[{
+				name: 'data',
+				data: signals[chartNum].data
+			},
+			{
+				name: 'wavelet',
+				data: signals[chartNum].wavelet
+			},
+			{
+				name: '2ndDerivative',
+				data: signals[chartNum].d2Data
+			},
+			{
+				name: '1stDerivative',
+				data: signals[chartNum].d1Data
+			}]
+		});
+	}
 	initMarkPoints(chart, chartNum);  //在更新过图上数据之后还需要重绘特征点
+	
+
 }
 
 function initialDraw() {
@@ -482,13 +539,16 @@ function initialDraw() {
     chart2 = echarts.init(document.getElementById('chart2'),"dark");
     chart3 = echarts.init(document.getElementById('chart3'),"dark");
     chart4 = echarts.init(document.getElementById('chart4'),"dark");
+	chartFFT = echarts.init(document.getElementById('chartFFT'),"dark");
     chartAry = [chart1, chart2, chart3, chart4];
+	var initOption;
+	initOption = initCharts(initOption);
 	chart1.setOption(initOption, true);
 	chart1.setOption(
 	{
 		legend:{
 			selected:{
-				"data":true, "curvature":false, "2ndDerivative":false, "1stDerivative":false
+				"data":true, [analyzeType.value]:false, "2ndDerivative":false, "1stDerivative":false
 			}
 		},
 	});
@@ -499,7 +559,7 @@ function initialDraw() {
 	{
 		legend:{
 			selected:{
-				"data":false, "curvature":true, "2ndDerivative":false, "1stDerivative":false
+				"data":false, [analyzeType.value]:true, "2ndDerivative":false, "1stDerivative":false
 			}
 		},
 	});
@@ -510,7 +570,7 @@ function initialDraw() {
 	{
 		legend:{
 			selected:{
-				"data":false, "curvature":false, "2ndDerivative":true, "1stDerivative":false
+				"data":false, [analyzeType.value]:false, "2ndDerivative":true, "1stDerivative":false
 			}
 		},
 	});
@@ -521,7 +581,7 @@ function initialDraw() {
 	{
 		legend:{
 			selected:{
-				"data":false, "curvature":false, "2ndDerivative":false, "1stDerivative":true
+				"data":false, [analyzeType.value]:false, "2ndDerivative":false, "1stDerivative":true
 			}
 		},
 	});
@@ -531,6 +591,15 @@ function initialDraw() {
 	chart2.on('click', dealChartOnClick);
 	chart3.on('click', dealChartOnClick);
 	chart4.on('click', dealChartOnClick);
+	
+	//绘制初始FFT
+	chartFFT.setOption(FFToption, true);
+	chartFFT.setOption({
+			series:{
+				name: 'FFT',
+				data: signals[0].fft
+			}
+	})
 }
 
 function dealChartOnClick(params) { 
@@ -552,6 +621,13 @@ function dealChartOnClick(params) {
 function changeID() {
 	var chartNum = IDselecter.value;
 	for (var j = 0; j < chartAry.length; j++) {
-	    changeData(chartAry[j], chartNum);
+	    changeData(chartAry[j], chartNum);  //替换四个图表的数据
 	}
+	//重绘FFT
+	chartFFT.setOption({
+			series:{
+				name: 'FFT',
+				data: signals[chartNum].fft
+			}
+	})
 }

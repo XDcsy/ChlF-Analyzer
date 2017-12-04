@@ -5,9 +5,14 @@ $( "#accordion" ).accordion({
     collapsible: true,
 	active:false
 });
+$( "#dialogFFT" ).dialog({ autoOpen: false, width: 800, height: 600 });
 $( "#dialog0" ).dialog({ autoOpen: false, width: 480, height: 700 });
 $( "#dialog3" ).dialog({ autoOpen: false, width: 600, height: 700 });
 $( ".controlgroup" ).controlgroup();
+
+$( "#showFFT" ).click(function() {
+	$( "#dialogFFT" ).dialog( "open" );
+});
 
 $( "#dialog1" ).dialog({ autoOpen: false });
 $( "#dialog1" ).tabs();
@@ -108,3 +113,12 @@ $( "#trigger0" ).click(function() {
 $( "#trigger3" ).click(function() {
     $( "#dialog3" ).dialog( "open" );
 });
+var linear = false;
+var onlyone = true;
+$( "#setting-ok" ).button().click(function() {
+	linear = document.getElementById('reg-linear').checked;
+	onlyone = document.getElementById('reg-linear').checked;
+	$( "#dialog3" ).dialog( "close" );
+});
+
+

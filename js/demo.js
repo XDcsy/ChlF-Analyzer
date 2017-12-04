@@ -1,6 +1,11 @@
 
 $(function(){
-    document.getElementById('files').addEventListener('change', handleFileSelect, false);
+    //初始化各按钮的状态
+	$('#reg-log').prop("checked", true).trigger("change");
+	$('#onlyone').prop("checked", true).trigger("change");
+	$('#fast').prop("checked", true).trigger("change");
+	
+	document.getElementById('files').addEventListener('change', handleFileSelect, false);
 	var filesNumber = 0;
 	$("#sel").click(function(){
 		$("#files").click();
