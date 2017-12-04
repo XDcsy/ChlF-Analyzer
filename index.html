@@ -255,9 +255,7 @@
 		<p><strong>● 分析方式：</strong></p>
 		<select id="type">
 			<option>曲率（默认）</option>
-			<option>频域变换（FFT）</option>
 			<option>小波变换（Wavelet）</option>
-			<option>经验模态分解（EMD）</option>
 		</select>
 		</div>
 		<div>
@@ -265,6 +263,12 @@
 				<legend>说明</legend>
 				<p>“小波变换（Wavelet）”：展示输入信号经小波变换后的图形用于分析。小波变换是空间（时间）和频率的局部变换，能有效地从信号中提取信息。</p>
 			</fieldset>
+		</div>
+		<div>
+			<br>
+			<p><strong>● 是否计算频谱：</strong>打开时，程序会对信号进行快速傅立叶变换（FFT），在分析时可以查看信号的频谱图。</p>
+			<label for="fft">计算频谱</label>
+			<input type="checkbox" name="fft" id="fft">
 		</div>
 		<div>
 			<br>

@@ -161,20 +161,24 @@ function signal(data) { //构造函数
 		//以下以sampleY计算FFT及wavelet
 		//fft
 		var complexY = [];
-		var fftX = [];
-		var fftY = [];
+		var fftRE = [];
+		var fftYM = [];
+		var fftA = [];
 		for (var i = 0; i < sampleY.length; i++) {
 			complexY.push(new Complex(sampleY[i], 0)); //实部sampleY[i]，虚部0
 		}
 		var fftComplexResult = ft.FFT(complexY);
+		fftComplexResult.splice(samplePointsNum/2, samplePointsNum/2);  //取前半段
+		fftF = sampleX.slice(samplePointsNum/2);  //!!!以后应换为频率
 		for (var i = 0; i < fftComplexResult.length; i++) {
-			fftX.push(fftComplexResult[i].re);
-		    fftY.push(fftComplexResult[i].im);
+			fftRE.push(fftComplexResult[i].re/samplePointsNum*2);
+		    fftYM.push(fftComplexResult[i].im/samplePointsNum*2);  //取出实部和虚部并/N*2
+			fftA.push(Math.sqrt(Math.pow(fftRE[i],2) + Math.pow(fftYM[i],2)))  //平方和开根号求模
 		}
-		this.fft = combine(fftX, fftY);
+		this.fft = combine(fftF,fftA);
 		//wavelet
 		waveletY = haarWaveletTransform(sampleY);
-		this.wavelet = combine(sampleX, waveletY)
+		this.wavelet = combine(sampleX, waveletY);
         //曲率
 		var d1Y = getDerivative(1, T, linearReg.parameter);
 		var d2Y = getDerivative(2, T, linearReg.parameter);
@@ -197,20 +201,26 @@ function signal(data) { //构造函数
 		//以下以sampleY计算FFT及wavelet
 		//fft
 		var complexY = [];
-		var fftX = [];
-		var fftY = [];
+		var fftRE = [];
+		var fftYM = [];
+		var fftA = [];
 		for (var i = 0; i < sampleY.length; i++) {
 			complexY.push(new Complex(sampleY[i], 0)); //实部sampleY[i]，虚部0
 		}
 		var fftComplexResult = ft.FFT(complexY);
+		fftComplexResult.splice(samplePointsNum/2, samplePointsNum/2);  //取前半段
+		fftF = sampleX.slice(samplePointsNum/2);  //!!!以后应换为频率
 		for (var i = 0; i < fftComplexResult.length; i++) {
-			fftX.push(fftComplexResult[i].re);
-		    fftY.push(fftComplexResult[i].im);
+			fftRE.push(fftComplexResult[i].re/samplePointsNum*2);
+		    fftYM.push(fftComplexResult[i].im/samplePointsNum*2);  //取出实部和虚部并/N*2
+			fftA.push(Math.sqrt(Math.pow(fftRE[i],2) + Math.pow(fftYM[i],2)))  //平方和开根号求模
 		}
-		this.fft = combine(fftX, fftY);
+		this.fft = combine(fftF,fftA);
+		
+		
 		//wavelet
 		waveletY = haarWaveletTransform(sampleY);
-		this.wavelet = combine(sampleX, waveletY)
+		this.wavelet = combine(sampleX, waveletY);
 		//曲率
 		var d1Y = getDerivative(1, logT, reg.parameter);
 		var d2Y = getDerivative(2, logT, reg.parameter);
