@@ -407,11 +407,21 @@ function findMaxPoint(range) {
 			var find = false;
 			for (var j = 0; j < range[i].length; j++) { //index遍历range每个点
 			    p = range[i][j];  //p为真实的下标
-				if ( (signals[k].cData[p][1] > signals[k].cData[p-1][1]) && (signals[k].cData[p][1] > signals[k].cData[p+1][1]) ) {
-					signals[k].featurePoints.push(p);  //signals[k].featurePoints存储的是特征点的index
-					find = true;
-					if (onlyone)  //只寻找一个点时，找到后结束
-						break;
+				if (analyzeType.value == "curvature") {
+					if ( (signals[k].cData[p][1] > signals[k].cData[p-1][1]) && (signals[k].cData[p][1] > signals[k].cData[p+1][1]) ) {
+						signals[k].featurePoints.push(p);  //signals[k].featurePoints存储的是特征点的index
+						find = true;
+						if (onlyone)  //只寻找一个点时，找到后结束
+							break;
+					}
+				}
+				if (analyzeType.value == "wavelet") {
+					if ( (signals[k].wavelet[p][1] > signals[k].wavelet[p-1][1]) && (signals[k].wavelet[p][1] > signals[k].wavelet[p+1][1]) ) {
+						signals[k].featurePoints.push(p);  //signals[k].featurePoints存储的是特征点的index
+						find = true;
+						if (onlyone)  //只寻找一个点时，找到后结束
+							break;
+					}
 				}
 				
 			}
