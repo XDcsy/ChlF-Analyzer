@@ -1,4 +1,10 @@
 # ChlF-Analyzer
+
+##
+This is a pure front-end project and is designed to be able to run locally. Therefore this repo contains codes from the following libraries: echarts.js jquery.js  XLSX.js Blob.js FileSaver.js and fft.js.<br>
+The lincense of this project is GPL-3.0.<br>
+The copyright of this project (not including the libraries) is authorized to Jiangnan University by National Copyright Administration of PRC.<br>
+
 ## Todo
 重写拟合的方法<br>
 划定特征点范围后到求极值这部分的代码需要改动（关于是否只用第一个信号为参考，需要考虑）<br>
