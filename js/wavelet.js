@@ -1,3 +1,4 @@
+//ref:https://en.wikipedia.org/wiki/Discrete_wavelet_transform#Code_example
 function haarWaveletTransform(input) {
     // This function assumes that input.length=2^n, n>1
     var output = new Array(input.length);
